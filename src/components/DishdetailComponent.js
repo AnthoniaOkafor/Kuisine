@@ -26,14 +26,13 @@ class DishDetail extends Component {
 
         renderComment(dish) {
             if (dish !=null && dish.comments !=null) {
-                let opt = { year: 'numeric', month: 'short', day: 'numeric' };
                 const commentList = dish.comments.map((i) => {
                     return(
                         <div key={i.id}>
                             <h4>Comments</h4>
                             <ul className="list-unstyled">
                                 <li>{i.comment}</li>
-                                <li> --{i.author}, {new Date(i.date).toLocaleDateString("en-US", opt)}</li>
+                                <li> --{i.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(i.date)))}</li>
                             </ul>
                         </div>
                     )

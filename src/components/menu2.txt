@@ -61,3 +61,28 @@ class Menu extends Component {
 }
 
 export default Menu;
+
+---------------------------------------------------
+ renderComment(dish) {
+            if (dish !=null && dish.comments !=null) {
+                let opt = { year: 'numeric', month: 'short', day: 'numeric' };
+                const commentList = dish.comments.map((i) => {
+                    return(
+                        <div key={i.id}>
+                            <h4>Comments</h4>
+                            <ul className="list-unstyled">
+                                <li>{i.comment}</li>
+                                <li> --{i.author}, {new Date(i.date).toLocaleDateString("en-US", opt)}</li>
+                            </ul>
+                        </div>
+                    )
+                })
+                return (
+                    <div>{commentList}</div>
+                )
+            }
+            else
+                return(
+                    <div></div>
+                );
+        }
