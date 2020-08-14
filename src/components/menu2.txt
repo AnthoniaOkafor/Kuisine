@@ -744,3 +744,322 @@ export const initialState = {
 export const Reducer = (state = initialState, action) => {
     return state;
 };
+
+------------------------------------------------------
+MainComponent.js
+
+import React, { Component } from 'react';
+import Header from './HeaderComponent';
+import Home from './HomeComponent';
+import Menu from './MenuComponent';
+import Contact from './ContactComponent';
+import About from './AboutComponent';
+import DishDetail from './DishdetailComponent';
+import Footer from './FooterComponent';
+
+//import { DISHES } from '../shared/dishes';
+//import { COMMENTS } from '../shared/comments';
+//import { PROMOTIONS } from '../shared/promotions';
+//import { LEADERS } from '../shared/leaders';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
+
+
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  
+  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+
+});
+
+class Main extends Component {
+
+  constructor(props) {
+    super(props);
+  } 
+
+  render() {
+    /*
+    const HomePage = () => {
+      return(
+          <Home 
+              dish={this.state.dishes.filter((dish) => dish.featured)[0]}
+              promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
+              leader={this.state.leaders.filter((leader) => leader.featured)[0]}
+          />
+      );
+    }
+
+    const DishWithId = ({match}) => {
+      return(
+        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
+        comments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+      )
+    }
+
+    return (
+      <div>
+        <Header />
+        <Switch>
+              <Route path='/home' component={HomePage} />
+              <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
+              <Route path='/menu/:dishId' component={DishWithId} />} />
+              <Route exact path='/contactus' component={Contact} />} />
+              <Route exact path='/aboutus' component={() => <About leaders={this.state.leaders} />} />
+              <Redirect to="/home" />
+          </Switch>
+        <Footer />
+      </div>
+    ); */
+
+    const HomePage = () => {
+      return(
+          <Home 
+              dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+              promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
+              leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+          />
+      );
+    }
+
+    const DishWithId = ({match}) => {
+      return(
+          <DishDetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
+            comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+            addComment={this.props.addComment} />
+      );
+    };
+
+    return (
+      <div>
+        <Header />
+        <div>
+          <Switch>
+              <Route path='/home' component={HomePage} />
+              <Route exact path='/aboutus' component={() => <About leaders={this.props.leaders} />} />} />
+              <Route exact path='/menu' component={() => <Menu dishes={this.props.dishes} />} />
+              <Route path='/menu/:dishId' component={DishWithId} />
+              <Route exact path='/contactus' component={Contact} />} />
+              <Redirect to="/home" />
+          </Switch>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+
+--------------------------------------------------------
+DishdetailComponent.js
+
+import React, {Component} from 'react';
+import { Card, CardImg, CardText, CardBody,
+    CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Row, Col, Label } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
+
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+
+
+class CommentForm extends Component {
+    constructor(props) {
+    super(props);
+        this.state = {
+            isModalOpen: false
+        }
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    toggleModal() {
+        this.setState({
+          isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    handleSubmit(values) {
+        console.log('Current State is: ' + JSON.stringify(values));
+       // alert('Current State is: ' + JSON.stringify(values));
+       this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    }
+
+    render() {
+        return (
+            <div>
+                <div>
+                <Button outline onClick={this.toggleModal}><span className="fa fa-edit fa-lg"></span> Submit Comment</Button>
+                </div>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                    <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                        <Row className = "form-group">
+                            <Label htmlFor="rating" md={12}>Rating</Label>
+                            <Col md={12}>
+                                <Control.select model=".rating" id="rating" name="rating" 
+                                
+                                    placeholder="Rating"
+                                    className = "form-control"
+                                    validators= {{
+                                        required
+                                    }}>
+                                    <option value="" selected disabled>Choose here</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </Control.select>
+                                <Errors
+                                    className="text-danger"
+                                    model=".rating"
+                                    show="touched"
+                                    messages={{
+                                        required: 'Required'
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className = "form-group">
+                            <Label htmlFor="author" md={12}>Your name</Label>
+                            <Col md={12}>
+                                <Control.text model=".author" id="author" name="author" 
+                                    placeholder="Your name"
+                                    className = "form-control"
+                                    validators= {{
+                                        required, minLength: minLength(3), maxLength: maxLength(15)
+                                    }}/>
+                                <Errors
+                                    className="text-danger"
+                                    model=".author"
+                                    show="touched"
+                                    messages={{
+                                        required: 'Required',
+                                        minLength: 'Must be greater than 2 characters',
+                                        maxLength: 'Must be 15 characters or less'
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className = "form-group">
+                            <Label htmlFor="comment" md={12}>Comment</Label>
+                            <Col md={12}>
+                                <Control.textarea model=".comment" id="comment" name="comment" 
+                                    rows ="6"
+                                    className = "form-control"
+                                    validators= {{
+                                        required
+                                    }}/>
+                                <Errors
+                                    className="text-danger"
+                                    model=".comment"
+                                    show="touched"
+                                    messages={{
+                                        required: 'Required'
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Col>
+                                <Button type="submit" color="primary">
+                                Submit
+                                </Button>
+                            </Col>
+                        </Row>
+                    </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </div>
+        )
+
+    }
+
+}
+
+function RenderDish({dish}) {
+    if (dish != null)
+      return(
+            <Card>
+                <CardImg top src={dish.image} alt={dish.name} />
+                <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+                <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card> 
+      );         
+    else
+        return(
+            <div></div>
+        );
+}
+    
+function RenderComments({comments, addComment, dishId}) {
+    if (comments !=null) {
+        const commentList = comments.map((i) => {
+            return(
+                <div key={i.id}>
+                    <h4>Comments</h4>
+                    <ul className="list-unstyled">
+                        <li>{i.comment}</li>
+                        <li> --{i.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(i.date)))}</li>
+                    </ul>
+                </div>
+            )
+        })
+        return (
+            <div>
+                {commentList}
+                <CommentForm dishId={dishId} addComment={addComment} />
+            </div>
+        )
+    }
+    else
+        return(
+            <div></div>
+        );
+}
+
+const DishDetail =(props) => {
+    return (
+        <div className="container">
+            <div className="row">
+                <Breadcrumb>
+
+                    <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                    <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="col-12">
+                    <h3>{props.dish.name}</h3>
+                    <hr />
+                </div>                
+            </div>
+            <div className="row">
+                <div className="col-12 col-md-5 m-1">
+                    <RenderDish dish={props.dish} />
+                </div>
+                <div className="col-12 col-md-5 m-1">
+                    <RenderComments comments={props.comments} 
+                    addComment={props.addComment}
+                    dishId={props.dish.id}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+}
+export default DishDetail;
