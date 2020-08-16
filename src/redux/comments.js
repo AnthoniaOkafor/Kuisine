@@ -10,7 +10,7 @@ export const Comments = (state = { errMess: null, comments:[]}, action) => {
   
       case ActionTypes.ADD_COMMENT:
           var comment = action.payload;
-          //comment.id = state.comments.length;
+          //comment.id = state.comments.length; // we don't need this because the length is now coming from the server
           //comment.date = new Date().toISOString();
           return { ...state, comments: state.comments.concat(comment)};
   

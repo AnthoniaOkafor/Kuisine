@@ -14,16 +14,16 @@ class Contact extends Component {
     constructor(props) {
         super(props);
 
-        this.handleSubmit = this.handleSubmit.bind(this);    
-        
+        this.handleSubmit = this.handleSubmit.bind(this);       
     }
 
-    handleSubmit(values) {
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
-        this.props.resetFeedbackForm();
-        // event.preventDefault();
-    }
+   handleSubmit(values) {
+    console.log('Thank you for your feedback: ' + JSON.stringify(values));
+    //alert('Thank you for your feedback: ' + JSON.stringify(values));
+    this.props.resetFeedbackForm();
+    this.props.postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message );
+    // event.preventDefault();
+}
 
     render() {
         return(
@@ -108,7 +108,7 @@ class Contact extends Component {
                                         model=".lastname"
                                         show="touched"
                                         messages={{
-                                            required: 'Required',
+                                                required: 'Required',
                                             minLength: 'Must be greater than 2 characters',
                                             maxLength: 'Must be 15 characters or less'
                                         }}
@@ -159,6 +159,27 @@ class Contact extends Component {
                                      />
                                 </Col>
                             </Row>
+
+                            <Row className= "form-group">
+                                <Col md={{size: 6, offset: 2}}>
+                                    <Row className="form-group">
+                                        <Label htmlFor="agree">
+                                            <Control.checkbox
+                                            model=".agree" id="agree" name="agree" />    
+                                            {' '}
+                                            <strong>May we contact you?</strong>
+                                        </Label>
+                                    </Row>
+                                </Col>
+                                <Col md={{size: 3, offset: 1}}>
+                                    <Control.select model=".contactType" id="contactType" name="contactType" 
+                                    className = "form-control">
+                                        <option>Tel.</option>
+                                        <option>Email</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+
                             <Row className="form-group">
                                 <Label htmlFor="message" md={2}>Your Feedback</Label>
                                 <Col md={10}>
