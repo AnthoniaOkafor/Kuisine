@@ -176,14 +176,6 @@ function RenderComments({comments, postComment, dishId}) {
         )
     }
 }
-
-       /* return (
-            <div>
-                {commentList}
-               
-            </div>
-        ) */
-
     
 
 const DishDetail =(props) => {
