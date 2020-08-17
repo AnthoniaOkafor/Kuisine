@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem,
     Button, Row, Col, Label } from 'reactstrap';
-import { Control, Form, Errors, actions } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -162,14 +162,12 @@ class Contact extends Component {
 
                             <Row className= "form-group">
                                 <Col md={{size: 6, offset: 2}}>
-                                    <Row className="form-group">
                                         <Label htmlFor="agree">
                                             <Control.checkbox
                                             model=".agree" id="agree" name="agree" />    
                                             {' '}
                                             <strong>May we contact you?</strong>
                                         </Label>
-                                    </Row>
                                 </Col>
                                 <Col md={{size: 3, offset: 1}}>
                                     <Control.select model=".contactType" id="contactType" name="contactType" 

@@ -34,11 +34,7 @@ const mapDispatchToProps = dispatch => ({
   postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message)) 
 });
 
-class Main extends Component {
-
-  constructor(props) {
-    super(props);
-  } 
+class Main extends Component { 
 
   componentDidMount() {
     this.props.fetchDishes();

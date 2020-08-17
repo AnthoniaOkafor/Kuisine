@@ -58,7 +58,9 @@ export const fetchDishes = () => (dispatch) => {
       })
     .then(response => response.json())
     .then(dishes => dispatch(addDishes(dishes)))
-    .catch(error => dispatch(dishesFailed(error.message)));
+   // .catch(error => dispatch(dishesFailed(error.message)));
+    //.catch(error =>  { console.log('Fetch Dishes', error.message); alert('Dishes could not be fetched\nError: '+error.message); });
+    .catch(error => alert('Items could not be fetched\nError: '+error.message));
 };
 
 export const dishesLoading = () => ({
