@@ -11,25 +11,33 @@
 }
 
 .footer{
-    background-color: #D1C4E9;
+    background-color: rgb(2, 65, 92);
     margin:0px auto;
     padding: 20px 0px 20px 0px;
+    color:floralwhite;
 }
 .jumbotron {
     padding:70px 30px 70px 30px;
     margin:0px auto;
-    background: #9575CD ;
-    color:floralwhite;
+    background: floralwhite ;
+    color:rgb(2, 65, 92);
 }
 
 address{
     font-size:80%;
     margin:0px;
-    color:#0f0f0f;
+    color:floralwhite;   
 }
 
-.navbar-dark {
-    background-color: #512DA8;
+contact{
+    font-size:80%;
+    margin:0px;  
+}
+
+.navbar {
+    background-color :rgb(234, 238, 22);
+    /*color: #0f0f0f;*/
+    
 }
 
 .page-enter {
